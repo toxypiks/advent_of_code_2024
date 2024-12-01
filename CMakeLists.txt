@@ -6,12 +6,22 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories(include)
 
-set(DAY_ONE
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/day_one.c
+set(DAY_ONE_1_SRC
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/day_one_1.c
   )
 
-add_executable(day_one)
-target_sources(day_one
+add_executable(day_one_1)
+target_sources(day_one_1
  PRIVATE
-  ${DAY_ONE}
+  ${DAY_ONE_1_SRC}
+  )
+
+set(DAY_ONE_2_SRC
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/day_one_2.c
+  )
+
+add_executable(day_one_2)
+target_sources(day_one_2
+ PRIVATE
+  ${DAY_ONE_2_SRC}
   )
