@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-void read_input_matrix(int values[100][8])
+void read_input_matrix(int values[1000][8])
 {
   bool read_column = true;
   size_t i = {0};
@@ -18,21 +18,25 @@ void read_input_matrix(int values[100][8])
       buffer[1] = 0; // 0 terminated
       if(buffer[0] == ' ') {
         values[i][j] = atoi(number);
-        // printf("%d\n", atoi(number));
         num_count = 0;
         j++;
       }
       else if(buffer[0] == '\n') {
         read_row = false;
         values[i][j] = atoi(number);
-        // printf("%d\n", atoi(number));
       }
       else if(buffer[0] == '\0') {
         return;
       }
       else {
-        if(num_count < 2) {
-          number[num_count] = buffer[0];
+        if(num_count == 0) {
+          number[0] = '0';
+          number[1] = buffer[0];
+          num_count++;
+        }
+        else if (num_count == 1){
+          number[0] = number[1];
+          number[1] = buffer[0];
           num_count++;
         }
       }
@@ -49,39 +53,83 @@ void read_input_matrix(int values[100][8])
   }
 }
 
-void calc_safety(int matrix[6][5])
+typedef struct State{
+  bool save;
+  bool increasing;
+  bool decreasing;
+  unsigned int marker;
+} State;
+
+bool condition1(State* state, int xn, int xnp1)
 {
-  int save = {0};
-  for (size_t i = 0; i < 6; ++i) {
-    int decr = {0};
-    int incr = {0};
-    for (size_t j = 0; j < 4; ++j) {
-      if((matrix[i][j] > matrix [i][j+1]) && ((abs(matrix[i][j] - matrix[i][j+1])) <= 3)) {
-        decr += 1;
-      }
-      else if((matrix[i][j] < matrix [i][j+1]) && ((abs(matrix[i][j+1] - matrix[i][j])) <= 3)) {
-        incr += 1;
-      }
-    }
-    if (decr == 4 || incr == 4) {
-      save += 1;
+  if ((xn - xnp1) < 0) {
+    state->decreasing = true;
+    if(state->increasing == true) {
+      return false;
     }
   }
-  printf("save ones : %d\n", save);
+  if ((xn - xnp1) > 0) {
+    state->increasing = true;
+    if(state->decreasing == true) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool condition2(State state, int xn, int xnp1)
+{
+  if((abs(xn - xnp1)) > 0 && (abs(xn - xnp1)) <= 3) {
+    return true;
+  }
+  return false;
+}
+
+bool is_end(State state, int xnp1)
+{
+  if((state.marker > 6) || (xnp1 == 0)) {
+    return true;
+  }
+  return false;
+}
+
+void calc_safety(int matrix[1000][8])
+{
+  int num_save = {0};
+  for (size_t i = 0; i < 1000; ++i) {
+    State state = {
+      .save = true,
+      .increasing = false,
+      .decreasing = false,
+      .marker = 0
+    };
+    int xnp1 = matrix [i][state.marker+1];
+    int xn = matrix[i][state.marker];        // x[n]
+    while(!is_end(state, xnp1)){
+      if(!condition1(&state, xn, xnp1)){
+        state.save = false;
+        break;
+      }
+      if(!condition2(state, xn, xnp1)){
+        state.save = false;
+        break;
+      }
+      state.marker += 1;
+      xn = matrix[i][state.marker];        // x[n]
+      xnp1 = matrix [i][state.marker+1];   // x[n+1]
+    }
+    if (state.save == true) {
+      num_save += 1;
+    }
+  }
+  printf("save ones : %d\n", num_save);
 }
 
 int main(void)
 {
   int values[1000][8] = {0};
   read_input_matrix(values);
-  for(size_t i = 0; i < 1000; ++i) {
-    for(size_t j = 0; j < 8; ++j) {
-      printf("%d\n", values[i][j]);
-    }
-    printf("\n");
-  }
 
-  int test_input[][5] = {{7, 6, 4, 2, 1}, {1, 2, 7, 8, 9}, {9, 7, 6, 2, 1}, {1, 3, 2, 4, 5}, {8, 6, 4, 4, 1}, {1, 3, 6, 7, 9}};
-  calc_safety(test_input);
+  calc_safety(values);
   return 0;
 }
