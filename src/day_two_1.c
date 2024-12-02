@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-void read_input_matrix(int values[10][8])
+void read_input_matrix(int values[100][8])
 {
   bool read_column = true;
   size_t i = {0};
@@ -42,7 +42,7 @@ void read_input_matrix(int values[10][8])
       }
     }
     i++;
-    if(i > 10) {
+    if(i > 1000) {
       read_column = false;
       printf("Too long i\n");
     }
@@ -72,9 +72,9 @@ void calc_safety(int matrix[6][5])
 
 int main(void)
 {
-  int values[10][8] = {0};
+  int values[1000][8] = {0};
   read_input_matrix(values);
-  for(size_t i = 0; i < 10; ++i) {
+  for(size_t i = 0; i < 1000; ++i) {
     for(size_t j = 0; j < 8; ++j) {
       printf("%d\n", values[i][j]);
     }
