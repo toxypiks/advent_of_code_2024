@@ -39,7 +39,6 @@ int string_to_int(char window[13], size_t no1_start, size_t no1_end, size_t no2_
     j++;
   }
   int result =  atoi(no1) * atoi(no2);
-  printf("result: %d %s %s \n",result, no1,no2);
   return result;
 }
 
@@ -49,16 +48,17 @@ int check_window(char window[13]){
     //regexshizzle
     int result = 0;
     regex_t reg;
-    regex_t reg_no1;
-    regex_t reg_no2;
     char* pattern = "^mul\\([0-9]+,[0-9]+\\)";
     char* pattern_no1 = "\\([0-9]+,";
     char* pattern_no2 = ",[0-9]+\\)";
-    if (regcomp(&reg, pattern , REG_EXTENDED | REG_NOSUB) != 0) return -1;
+    if (regcomp(&reg, pattern , REG_EXTENDED) != 0) return -1;
     result = regexec(&reg, window, 0, 0, 0);
     if (result == 0){
-      if (regcomp(&reg_no1, pattern_no1 , REG_EXTENDED | REG_NOSUB) != 0) return -1;
-      if (regcomp(&reg_no2, pattern_no2 , REG_EXTENDED | REG_NOSUB) != 0) return -1;
+      regex_t reg_no1;
+      regex_t reg_no2;
+
+      if (regcomp(&reg_no1, pattern_no1 , REG_EXTENDED) != 0) return -1;
+      if (regcomp(&reg_no2, pattern_no2 , REG_EXTENDED) != 0) return -1;
       regmatch_t pm_no1;
       if (regexec(&reg_no1, window, 1, &pm_no1, REG_NOTBOL) != 0) return -1;
       regmatch_t pm_no2;
@@ -67,10 +67,9 @@ int check_window(char window[13]){
       size_t no1_end   = pm_no1.rm_eo-1;
       size_t no2_start = pm_no2.rm_so+1;
       size_t no2_end   = pm_no2.rm_eo-1;
-      printf("no1/no2 %d %d %d %d\n",no1_start, no1_end, no2_start, no2_end);
-      return string_to_int(window, no1_start, no1_end, no2_start, no2_end);
       regfree(&reg_no1);
       regfree(&reg_no2);
+      return string_to_int(window, no1_start, no1_end, no2_start, no2_end);
     }
     regfree(&reg);
     return 0;
@@ -91,6 +90,6 @@ int main(void)
     }
     num_mul += check_window(window);
   }
-  printf("num_mul: %d\n", num_mul);
+  printf("task1 - num_mul: %d\n", num_mul);
   return 0;
 }
