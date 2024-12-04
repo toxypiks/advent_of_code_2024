@@ -55,3 +55,13 @@ target_sources(day_three_1
  PRIVATE
   ${DAY_THREE_1_SRC}
   )
+
+set(DAY_THREE_2_SRC
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/day_three_2.c
+  )
+
+add_executable(day_three_2)
+target_sources(day_three_2
+ PRIVATE
+ ${DAY_THREE_2_SRC}
+  )
