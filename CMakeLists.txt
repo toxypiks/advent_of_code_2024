@@ -6,6 +6,35 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories(include)
 
+set(LIST_SRC
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/list.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/list.h
+  )
+
+add_library(list)
+target_sources(list
+ PRIVATE
+  ${LIST_SRC}
+  )
+
+set(TEST_LIST_SRC
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/test_list.c
+  )
+
+add_executable(test_list)
+target_sources(test_list
+ PRIVATE
+  ${TEST_LIST_SRC}
+  )
+target_include_directories(test_list
+ PUBLIC
+  include
+  )
+target_link_libraries(test_list
+  PUBLIC
+  list
+)
+
 set(DAY_ONE_1_SRC
   ${CMAKE_CURRENT_SOURCE_DIR}/src/day_one_1.c
   )
