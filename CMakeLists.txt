@@ -123,3 +123,7 @@ target_sources(day_five_1
  PRIVATE
  ${DAY_FIVE_1_SRC}
  )
+target_link_libraries(day_five_1
+  PRIVATE
+  list
+  )
