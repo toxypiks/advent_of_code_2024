@@ -48,3 +48,57 @@ size_t list_length(Elem* list){
   }
   return counter;
 }
+
+//sublist stuff
+
+void push_sublist(Sublist** sublist, Elem* new_value){
+  Sublist* new = (Sublist*)malloc(sizeof(Sublist));
+  new->list = new_value;
+  new->next_sublist = NULL;
+
+  if((*sublist) == NULL){
+    (*sublist) = new;
+    return;
+  }
+  // durchhangeln bis zum letzten Element
+  Sublist* tmp = *sublist;
+  while(tmp->next_sublist != NULL){
+    tmp = tmp->next_sublist;
+  }
+  tmp->next_sublist = new;
+}
+
+Elem* pop_sublist(Sublist** sublist){
+  if((*sublist)->next_sublist == NULL){ // just one
+    Elem* tmp = (*sublist)->list;
+    free((*sublist));
+    (*sublist) = NULL;
+    return tmp;
+  }
+  // durchhangeln bis zum letzten Element
+  Sublist* tmp = (*sublist)->next_sublist;
+  Sublist* pre_tmp = *sublist;
+  while(tmp->next_sublist != NULL){
+    pre_tmp = tmp;
+    tmp = tmp->next_sublist;
+  }
+  Elem* return_value = tmp->list;
+  free(tmp);
+  pre_tmp->next_sublist = NULL;
+
+  return return_value;
+}
+
+size_t sublist_length(Sublist* sublist){
+  if(sublist->next_sublist == NULL){
+    return 0;
+  }
+
+  int counter = 1;
+  Sublist* tmp = sublist->next_sublist;
+  while(tmp->next_sublist != NULL){
+    tmp = tmp->next_sublist;
+    counter += 1;
+  }
+  return counter;
+}
