@@ -20,7 +20,7 @@ struct Sublist {
 
 void delete(Elem* list);
 
-int pop(Elem* list);
+int pop(Elem** list);
 
 void push(Elem* list, int new_one);
 

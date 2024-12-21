@@ -13,6 +13,8 @@ void main(){
   push(&my_list, 1);
   push(&my_list, 2);
   push(&my_list, 3);
+  push(&my_list, 4);
+  push(&my_list, 5);
 
   push_sublist(&start, my_list.next);
 
@@ -20,23 +22,24 @@ void main(){
     .value=0,
     .next=NULL
   };
-  push(&my_list2, 21);
-  push(&my_list2, 22);
-  push(&my_list2, 23);
-  push(&my_list2, 24);
+  push(&my_list2, 6);
+  push(&my_list2, 7);
+  push(&my_list2, 8);
+  push(&my_list2, 9);
 
   push_sublist(&start, my_list2.next);
 
 
   Sublist* tmp = start;
-  while (tmp->next_sublist){
+  while (tmp){
     Elem* list_tmp = tmp->list;
     int length = list_length(list_tmp);
     for (size_t i=0;i<length;++i){
-      int value = pop(&my_list);
+      int value = pop(&(tmp->list));
       printf("value: %d\n", value);
     }
     printf("\n");
     tmp = tmp->next_sublist;
   }
+
 }

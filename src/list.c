@@ -17,13 +17,18 @@ void push(Elem* list, int new_value){
   tmp->next = new;
 }
 
-int pop(Elem* list){
-  if(list->next == NULL){
+int pop(Elem** list){
+  if(*list == NULL){
     return -1;
   }
+  if((*list)->next == NULL){
+    int tmp_int = (*list)->value;
+    free((*list));
+    return tmp_int;
+  }
   // durchhangeln bis zum letzten Element
-  Elem* tmp = list->next;
-  Elem* pre_tmp = list;
+  Elem* tmp = (*list)->next;
+  Elem* pre_tmp =  (*list);
   while(tmp->next != NULL){
     pre_tmp = tmp;
     tmp = tmp->next;
@@ -36,11 +41,15 @@ int pop(Elem* list){
 }
 
 size_t list_length(Elem* list){
-  if(list->next == NULL){
+  if(list == NULL){
     return 0;
   }
 
-  int counter = 1;
+  if(list->next == NULL){
+    return 1;
+  }
+
+  int counter = 2;
   Elem* tmp = list->next;
   while(tmp->next != NULL){
     tmp = tmp->next;

@@ -126,8 +126,8 @@ int main (void)
   size_t number_list_length = list_length(&number_list);
 
   for (size_t i = 0; i < number_list_length ;++i){
-    int value = pop(&number_list);
-    printf("value: %d\n", value);
+    // int value = pop(&number_list);
+    // printf("value: %d\n", value);
   }
   return 0;
 }
